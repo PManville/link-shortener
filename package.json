@@ -1,5 +1,5 @@
 {
-  "name": "Shooooort",
+  "name": "Link-shortener",
   "version": "1.0.0",
   "description": "Link shortener",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/patrickmanville/site.git"
+    "url": "git+https://github.com/PManville/link-shortener.git"
   },
   "author": "",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/patrickmanville/site/issues"
+    "url": "https://github.com/PManville/link-shortener/issues"
   },
-  "homepage": "https://github.com/patrickmanville/site#readme",
+  "homepage": "https://github.com/PManville/link-shortener#readme",
   "dependencies": {
     "axios": "^0.17.1",
     "babel-preset-airbnb": "^2.4.0",
