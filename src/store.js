@@ -23,14 +23,14 @@ export const urlInitialState = {
 };
 
 export const uiInitialState = {
-	isRed: false,
-	proxyUrl: "https://cors-anywhere.herokuapp.com/",
-	shortyUrl: "http://impraise-shorty.herokuapp.com/",
+	isNew: false,
+	isLoading: false,
+	shortyUrl: "http://localhost:8080/link/",
 	hoverText: null,
 	inputText: null,
 	newUrl: {
-		shortLink: '',
-		longLink: ''
+		shortcode: '',
+		originalurl: ''
 	},
 	lastValues: []
 };
@@ -57,10 +57,17 @@ const urlReducer = (state = urlInitialState, action) => {
 
 const uiReducer = (state = uiInitialState, action) => {
 	switch(action.type){
-		case "MAKERED":
+		case "LOADING":
 			state = {
 				...state,
-				isRed: action.payload,
+				isLoading: action.payload,
+				lastValues: [...state.lastValues, action.payload]
+			}
+			break;
+		case "NEWEFFECT":
+			state = {
+				...state,
+				isNew: action.payload,
 				lastValues: [...state.lastValues, action.payload]
 			}
 			break;

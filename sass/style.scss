@@ -5,15 +5,6 @@
 	src: url('/fonts/Montserrat-Regular.ttf')  format('truetype');
 }
 
-@font-face {
-	font-family: 'Roboto';
-	src: url('/fonts/Roboto-Regular.ttf')  format('truetype');
-}
-
-@font-face {
-	font-family: 'Roboto Light';
-	src: url('/fonts/Roboto-Light.ttf')  format('truetype');
-}
 
 
 $primary-text: #555;
@@ -24,12 +15,23 @@ $accent: #eb4a42;
 $light-background: #eaeaea;
 $disabled-button-background: #e0e0e0;
 
-$Roboto: 'Roboto', helvetica, arial, sans-serif;
-$RobotoLight: 'Roboto Light', helvetica, arial, sans-serif;
+$blue-lightest: #eaf8ff;
+$blue-medium: #fff;
+$blue-dark: #97b6c4;
+$blue-darkest: #647c88;
+
+
 $Montserrat: 'Montserrat', helvetica, arial, sans-serif;
+$Quicksand: 'Quicksand', helvetica, arial, sans-serif;
 
 html {
 	font-size: 16px;
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    background: #dcf4ff;
 	@media(max-width: 680px){
 	    font-size: 14px;
 	}
@@ -39,12 +41,35 @@ html {
 	@media(max-width: 400px){
 	    font-size: 11px;
 	}
+	&:before {
+	    background: #d7effb;
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    content: "";
+	    z-index: -1;
+	    transform: skewX(20deg);
+	}
+	&:after {
+	    background: $blue-lightest;
+	    position: absolute;
+	    top: 0;
+	    left: 10%;
+	    width: 80%;
+	    height: 100%;
+	    content: "";
+	    z-index: -1;
+	    transform: skewX(10deg);
+	}
 }
 
 body {    
-	font-family: $Roboto;
+	font-family: $Quicksand;
     max-width: 660px;
-    margin: 25px auto;
+    margin: 50px auto;
+    position: relative;
 }
 
 section {
@@ -57,79 +82,97 @@ section {
 }
 
 .header-section {
-    grid-template-columns: min-content auto max-content;
+    grid-template-columns: min-content;
     align-items: baseline;
+    justify-content: center;
     @media(max-width:500px){
 	    display: block;
-	    text-align: center;
     }
 	h1 {
-		margin: 5px 0;
+		margin: 5px -20px 0 0;
 		font-family: $Montserrat;
-	    font-size: 2.938rem;
+	    font-size: 3.5rem;
 	    line-height: 1.125em;
-	    color: $accent;
+	    color: $blue-darkest;
 	    display: inline-block;
 	    border-radius: 3px;
 	    position: relative;
-	    &:after {
-		    content: "";
-		    position: absolute;
-		    bottom: 0;
-		    width: 100%;
-		    height: 4px;
-		    left: 0;
-		    background: $accent;
-		    border-radius: 3px;
-	    }
+	    text-transform: uppercase;
+	    letter-spacing: 0.35em;
+	    text-shadow: 2px 2px 0px rgba(66, 212, 235, 0.45);
 	}
 	p {
 		margin: 5px 0;
-		font-family: $RobotoLight;
 		color: $secondary-text;
 		grid-column: 3;
 	}
 }
 
 .previous-section {
-    grid-template-columns: max-content 25px max-content;
-    align-items: center;
-	font-family: $RobotoLight;
+    justify-content: center;
+    padding: 25px 20px;
 	.previous {
 	    font-size: 1.375rem;
 		color: $primary-text;
 	}
 	.clear-history {
-		color: $accent;
-	    grid-column: 3;
+	    font-size: 0.85rem;
+	    text-transform: uppercase;
+	    display: inline-block;
+	    padding: 13px 18px;
+	    letter-spacing: 0.1em;
+	    background: $blue-darkest;
+	    color: #ebf8ff;
+	    width: 8.5rem;
+	    text-align: center;
 	    cursor: pointer;
 	}
 }
 
 .button-section {
-    grid-template-columns: auto 15px 150px;
-    padding: 30px 20px 60px;
+    grid-template-columns: auto 150px;
+    padding: 0px 40px;    
+    margin: 15px 0 90px; 
+    position: relative;
+    &:after {
+	    content: "";
+	    position: absolute;
+	    top: calc(50% - 0.5rem);
+	    right: 10px;
+	    font-family: lineawesome;
+	    font-size: 1rem;
+	    line-height: 1rem;
+	    animation: loading 1s infinite;
+	    opacity: 0;
+    }
+    &.loading {
+	    &:after {
+		    opacity: 1;
+		    transition: 0.5s;
+	    }
+	}
 	input {
-	    padding: 12px 18px;
-	    border-radius: 3px;
-		background: $light-background;
+	    padding: 15px 18px;
+		background: white;
 	    -webkit-appearance: none;
 	    border: 0;
 	    outline: none;
-	    font-size: 1rem;
-		font-family: $RobotoLight;
+	    font-size: 0.85rem;
 		color: $primary-text;
+		font-family: $Quicksand;
 		&::placeholder {
 			color: $disabled-button;
 		}
 		&[type="submit"] {
-			color: $disabled-button;
-			background: $disabled-button-background;
+		    color: #c4d1da;
+		    background: #d8e4eb;
 		    transition: 0.2s;
-		    grid-column: 3;
+		    text-transform: uppercase;
+		    font-weight: bold;
+		    letter-spacing: 0.2em;
 			&.active {
 				cursor: pointer;
-				background: $accent;
+				background: $blue-darkest;
 				color: white;
 			}
 			&:not(.active){
@@ -140,19 +183,25 @@ section {
 }
 
 .info-section {    
-	grid-template-columns: auto 4.375rem 6.875rem;
-	color: $secondary-text;
+	grid-template-columns: auto 4.5rem 8.5rem;
+	color: $blue-lightest;
+    background: $blue-dark;
 	text-transform: uppercase;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) inset;
 }
 .link-section {     
 	padding: 0;
+    background: #b4d5e4;
 	.link-item {   
-		grid-template-columns: auto 4.375rem 6.875rem;
+		grid-template-columns: auto 4.5rem 8.5rem;
 		position: relative;
 	    align-items: center;
 	    display: grid;
 	    padding: 15px 20px;
+	    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1) inset;
 		&:before {
 		    content: " ";
 			background: transparent;
@@ -163,28 +212,30 @@ section {
 		    width: 4px;
 		    transition: 0.2s;
 		}
-		&.red {
+		&.new {
 			&:before {
-				background: $accent;
+				background: #8098a3;
 			}
 		}
 		.links {
 			.top-section {
 			    cursor: pointer;
 			    padding: 4px 0;
+			    align-items: center;
 				.short-link {
 				    padding: 1px 0;
-					color: $primary-text;
+					color: white;
 				    font-size: 0.875rem;
+				    text-decoration: underline;
 					span {
-						color: $accent;
+						color: white;
 						font-size: 1rem;
 					}
 				}
 				.hover-text {
 				    padding: 1px 0;
-					font-family: $RobotoLight;
-					color: $accent;
+					color: white;
+					font-size: 0.85rem;
 				}
 				@media(min-width:660px){
 			    display: inline-grid;
@@ -201,18 +252,22 @@ section {
 					}
 				}
 			}
-			.long-link {
-				color: $unimportant-text;
-				font-family: $RobotoLight;
+			.long-link {    
+				color: #7c9bab;
 			    padding: 4px 0;
+			    font-size: 0.75rem;
 			}
 
 		}
 		.visits, .last-visited {
-			font-family: $RobotoLight;
-			color: $primary-text;
+			color: white;
+		    font-size: 0.85rem;
 		}
 	}
+}
+
+.hidden {
+	display: none;
 }
 
 #copyBox {
@@ -223,4 +278,11 @@ section {
     padding: 0;
 }
 
-
+@keyframes loading {
+	0% {
+		transform: rotateZ(0deg)
+	}
+	100% {
+		transform: rotateZ(360deg)
+	}
+}

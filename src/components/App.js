@@ -13,7 +13,7 @@ class App extends React.Component {
 				for(let i = 0; i < this.props.urlReducer.urls.length ; i++){
 					this.apiGet(this.props.urlReducer.urls[i], i, false);
 				}
-			}, 60000 
+			}, 6000
 		);
 	}
 		
@@ -51,16 +51,17 @@ class App extends React.Component {
 
 
 	apiGet(thisUrl, index, isNew){
-		// Gets the stats from each shortlink
+		// Gets the stats from each shortcode
 		var time, visits, startDate, lastVisited, difference, offset = 0;
-
-		fetch(this.props.uiReducer.proxyUrl + this.props.uiReducer.shortyUrl + thisUrl.shortLink + "/stats", {
+		this.props.loading(true);
+		fetch(this.props.uiReducer.shortyUrl + thisUrl.shortcode + "/info", {
 			method: "GET"
 		})
 		.then(response => {
 			return response.json()
 		})
 		.then(data => {
+			this.props.loading(false);
 			visits = data.redirectCount;
 			startDate = data.startDate;
 			try{
@@ -76,12 +77,13 @@ class App extends React.Component {
 			// Creates dummy URLs object
 			var urlsAll = [ ...this.props.urlReducer.urls ];
 			var urlNew = {
-						shortLink: thisUrl.shortLink,
-						longLink: thisUrl.longLink,
+						shortcode: thisUrl.shortcode,
+						originalurl: thisUrl.originalurl,
 						visits: visits,
 						startDate: startDate,
 						lastVisited: lastVisited
 					};
+			console.log(urlNew);
 			// Insert this URL into dummy URLs object, if it already exists replace old URL
 			urlsAll[index] = urlNew;
 			// Passes dummy URLs object to the store
@@ -92,9 +94,9 @@ class App extends React.Component {
 				console.log("Storage Failed")
 			}
 			if(isNew){
-				this.props.makeRed(true);
+				this.props.newEffect(true);
 				setTimeout(() => {
-					this.props.makeRed(false);
+					this.props.newEffect(false);
 				}, 2400);
 			}
 		})
@@ -104,8 +106,11 @@ class App extends React.Component {
 
 	apiPost(){
 		// Posts data from inputText to create new URL
-		fetch(this.props.uiReducer.proxyUrl + this.props.uiReducer.shortyUrl + "shorten", {
+		fetch(this.props.uiReducer.shortyUrl + "shorten", {
 			method: "POST",
+			headers: {
+				'content-type': 'application/json'
+			},
 			body: `{
 			  "url": "${this.props.uiReducer.inputText}"
 			}`
@@ -115,8 +120,8 @@ class App extends React.Component {
 		})
 		.then(data => {
 			this.props.changeNewUrl({
-					shortLink: data.shortcode,
-					longLink: this.props.uiReducer.inputText
+					shortcode: data.shortcode,
+					originalurl: this.props.uiReducer.inputText
 				});
 			this.props.changeInputText(null);
 			this.apiGet(this.props.uiReducer.newUrl, this.props.urlReducer.urls.length, true);
@@ -148,38 +153,52 @@ class App extends React.Component {
 		return '';
 	}
 
+	isLoading(){
+		try {
+			if(this.props.uiReducer.isLoading){
+				return ' loading';
+			}
+		}catch(err){}
+		return '';
+	}
+
+	getClearHistory(){
+		if(this.props.urlReducer.urls.length === 0){
+			return ' hidden';
+		}
+		return '';
+	}
 
 	render() {
 		return (
 			<div className="root-inner">
 				<input key={0} id="copyBox"></input>
 				<section key={1} className="header-section">
-					<h1>Shooooort</h1>
-					<p>The link shortener with a long name</p>
+					<h1>Shortener</h1>
 				</section>
-				<section key={2} className="button-section">
-					<input placeholder="URL" value={this.props.uiReducer.inputText || ''} onChange={(e) => this.valueChange(e.target.value)}></input>
-					<input type="submit" value="Shorten this link" className={"button" + this.submitEffect()} onClick={() => this.apiPost()}></input>
+				<section key={2} className={"button-section" + this.isLoading()}>
+					<input placeholder="Enter your URL here" value={this.props.uiReducer.inputText || ''} onChange={(e) => this.valueChange(e.target.value)}></input>
+					<input type="submit" value="Shorten" className={"button" + this.submitEffect()} onClick={() => this.apiPost()}></input>
 				</section>
-				<section key={3} className="previous-section">
-					<div className="previous">Previously shortened by you</div>
-					<div className="clear-history" onClick={() => this.clearHistory()}>Clear history</div>
-				</section>
-				<section key={4} className="info-section">
+				<section key={3} className={"info-section" + this.getClearHistory()}>
 					<div className="col-1">Link</div>
 					<div className="col-2">Visits</div>
 					<div className="col-3">Last visited</div>
 				</section>
-				<section key={5} className="link-section">
+				<section key={4} className="link-section">
 					{this.props.urlReducer.urls.map((url, i) => {
 						return <LinkItem key={i} i={this.props.urlReducer.urls.length - i - 1} />
 					})}
 				</section>
+				<section key={5} className={"previous-section" + this.getClearHistory()}>
+					<div className="clear-history" onClick={() => this.clearHistory()}>Clear history</div>
+				</section>	
 			</div>
 		)
 	}
 }
-				
+
+			
 
 const mapStateToProps = (state) => {
 	return {
@@ -201,9 +220,15 @@ const mapDispatchToProps = (dispatch) => {
 				type: "CLEARHISTORY"
 			})
 		},
-		makeRed: (amount) => {
+		loading: (amount) => {
 			dispatch({
-				type: "MAKERED",
+				type: "LOADING",
+				payload: amount
+			})
+		},
+		newEffect: (amount) => {
+			dispatch({
+				type: "NEWEFFECT",
 				payload: amount
 			})
 		},
