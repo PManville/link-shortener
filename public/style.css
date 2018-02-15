@@ -10,7 +10,7 @@ html {
   height: auto;
   min-height: 100%;
   overflow-x: hidden;
-  background: #dcf4ff; }
+  background: #eaf8ff; }
   @media (max-width: 680px) {
     html {
       font-size: 14px; } }
@@ -20,26 +20,6 @@ html {
   @media (max-width: 400px) {
     html {
       font-size: 11px; } }
-  html:before {
-    background: #d7effb;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: "";
-    z-index: -1;
-    transform: skewX(20deg); }
-  html:after {
-    background: #eaf8ff;
-    position: absolute;
-    top: 0;
-    left: 10%;
-    width: 80%;
-    height: 100%;
-    content: "";
-    z-index: -1;
-    transform: skewX(10deg); }
 
 body {
   font-family: "Quicksand", helvetica, arial, sans-serif;
